@@ -44,7 +44,22 @@ npm run build
 npm run preview
 ```
 
-`dist/` is a static website and can be deployed to a static hosting provider. Deployment has not been configured.
+## GitHub Pages
+
+The deployment target is **https://40n100w.github.io/ecosystem/**. The `.github/workflows/pages.yml` workflow builds and verifies the production site on each push to `main`, then deploys `dist/` to GitHub Pages. It uses the Pages-configured URL prefix, including `/ecosystem/` for the project address.
+
+In the repository’s **Settings → Pages → Build and deployment**, select **GitHub Actions** as the source. If you change the source after a push, run **Actions → Deploy website → Run workflow**. The workflow can also deploy to an existing branch-source Pages site when its source branch is `main`, but selecting Actions avoids competing source-folder builds.
+
+Do not publish the repository root as a static site: its `index.html` is a development entry point that loads JSX. The compiled HTML, JavaScript, styles, and fonts in `dist/` are the publishable site.
+
+Verify the project-path build locally:
+
+```sh
+npm run build -- --base=/ecosystem/
+npm run test:pages
+```
+
+This check serves only the built files at `/ecosystem/` and runs Chromium against that path. It verifies asset loading, the initial map, news entity matching, and two-step relationships. The test fails on JavaScript errors or missing assets. No API keys or deployment secrets are required; Actions uses its repository token.
 
 ## Curating the ecosystem
 
